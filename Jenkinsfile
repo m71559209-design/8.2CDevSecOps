@@ -2,21 +2,31 @@ pipeline {
     agent any
 
     stages {
+
         stage('Checkout') {
             steps {
                 echo 'Code checked out successfully'
             }
         }
 
-        stage('Build') {
+        stage('Install Dependencies') {
             steps {
-                echo 'Build stage running'
+                echo 'Installing dependencies...'
+                sh 'npm install'
             }
         }
 
-        stage('Test') {
+        stage('Build') {
             steps {
-                echo 'Test stage running'
+                echo 'Building application...'
+                sh 'npm run build'
+            }
+        }
+
+        stage('Security Test') {
+            steps {
+                echo 'Running Snyk security test...'
+                sh 'npm test'
             }
         }
     }
@@ -25,6 +35,7 @@ pipeline {
         success {
             echo 'Pipeline completed successfully!'
         }
+
         failure {
             echo 'Pipeline failed.'
         }
