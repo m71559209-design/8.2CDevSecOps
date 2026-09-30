@@ -1,8 +1,11 @@
 pipeline {
     agent any
 
-    stages {
+    tools {
+        nodejs 'NodeJS'
+    }
 
+    stages {
         stage('Checkout') {
             steps {
                 echo 'Code checked out successfully'
@@ -12,6 +15,8 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 echo 'Installing dependencies...'
+                sh 'node --version'
+                sh 'npm --version'
                 sh 'npm install'
             }
         }
@@ -25,7 +30,7 @@ pipeline {
 
         stage('Security Test') {
             steps {
-                echo 'Running Snyk security test...'
+                echo 'Running security test...'
                 sh 'npm test'
             }
         }
@@ -35,7 +40,6 @@ pipeline {
         success {
             echo 'Pipeline completed successfully!'
         }
-
         failure {
             echo 'Pipeline failed.'
         }
