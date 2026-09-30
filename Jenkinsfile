@@ -31,7 +31,13 @@ pipeline {
         stage('Security Test') {
             steps {
                 echo 'Running security test...'
-                sh 'npm test'
+
+                withCredentials([string(credentialsId: 'snyk-token', variable: 'SNYK_TOKEN')]) {
+                    sh '''
+                        snyk auth "$SNYK_TOKEN"
+                        npm test
+                    '''
+                }
             }
         }
     }
